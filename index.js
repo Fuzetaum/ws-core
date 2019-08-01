@@ -1,4 +1,4 @@
-const { parsed } = require('dotenv').config();
+const fs = require('fs');
 const log = require('./src/logs');
 
 const properties = new Map();
@@ -18,13 +18,16 @@ const addProperty = (id, value) => {
 
 const getProperty = (id) => properties.get(id);
 
-if (!parsed || !parsed.ws) {
-  log.ERROR_FATAL('Configuration object "ws" not found. Check your ".env" file.');
+let wsData;
+try {
+  wsData = JSON.parse(fs.readFileSync('application.json', 'utf-8'));
+} catch (error) {
+  log.ERROR_FATAL('An error occurred while reading the "application.json" file');
+  console.error(error);
   process.exit(1);
 }
 
-const parsedWsConfig = JSON.parse(parsed.ws);
-Object.keys(parsedWsConfig).forEach(wsPropertyKey => addProperty(wsPropertyKey, parsedWsConfig[wsPropertyKey]));
+Object.keys(wsData).forEach(wsPropertyKey => addProperty(wsPropertyKey, wsData[wsPropertyKey]));
 
 module.exports = {
   context: {

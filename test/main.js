@@ -13,6 +13,7 @@ assert.strictEqual('Something else', properties.get('test').this);
 assert.strictEqual('{"this":"Something else"}', properties.get('test').toString());
 
 properties.add('test', { field: 'value' });
+assert.strictEqual('Something else', properties.get('test').this);
 
 assert.strictEqual(true, typeof properties.get('test1') === 'string');
 assert.strictEqual('value', properties.get('test1'));
